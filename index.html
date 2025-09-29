@@ -1,597 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>What To Eat? - Discover Popular Dishes</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        :root {
-            --tomato: #FF6B6B;
-            --avocado: #8BC34A;
-            --lemon: #FFD54F;
-            --eggplant: #673AB7;
-            --berry: #E91E63;
-            --mint: #4DB6AC;
-            --carrot: #FF9800;
-            --cheese: #FFC107;
-            --lettuce: #66BB6A;
-            --chocolate: #795548;
-            --cream: #FFF9C4;
-            --dark: #333333;
-            --light: #F5F5F5;
-        }
-
-        body {
-            background: linear-gradient(135deg, var(--cream) 0%, var(--mint) 100%);
-            color: var(--dark);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 800px;
-            width: 100%;
-            background-color: white;
-            border-radius: 25px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            text-align: center;
-            margin-top: 20px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 8px;
-            background: linear-gradient(to right, var(--tomato), var(--avocado), var(--lemon), var(--berry), var(--carrot));
-        }
-
-        header {
-            margin-bottom: 30px;
-            position: relative;
-        }
-
-        h1 {
-            color: var(--tomato);
-            font-size: 2.8rem;
-            margin-bottom: 10px;
-            font-weight: 700;
-            text-shadow: 2px 2px 0 var(--cream);
-        }
-
-        .subtitle {
-            color: var(--dark);
-            font-size: 1.2rem;
-            font-weight: 500;
-        }
-
-        .language-selector {
-            position: absolute;
-            top: 0;
-            right: 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: var(--light);
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-        }
-
-        .language-selector select {
-            border: 1px solid var(--mint);
-            border-radius: 10px;
-            padding: 5px;
-            background: white;
-        }
-
-        .food-display {
-            background: linear-gradient(to bottom right, #fff5f5, var(--cream));
-            border-radius: 20px;
-            padding: 25px;
-            margin: 25px 0;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-            transition: all 0.4s ease;
-            min-height: 400px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border: 2px dashed var(--lemon);
-            position: relative;
-        }
-
-        .food-image {
-            width: 280px;
-            height: 280px;
-            border-radius: 15px;
-            object-fit: cover;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-            margin-bottom: 20px;
-            border: 5px solid white;
-            transition: transform 0.3s ease;
-        }
-
-        .food-image:hover {
-            transform: scale(1.03);
-        }
-
-        .food-name {
-            font-size: 2.4rem;
-            color: var(--eggplant);
-            margin: 15px 0;
-            font-weight: 700;
-            text-align: center;
-            line-height: 1.2;
-        }
-
-        .food-category {
-            display: inline-block;
-            background: var(--avocado);
-            color: white;
-            padding: 8px 20px;
-            border-radius: 30px;
-            font-size: 1rem;
-            font-weight: 600;
-            margin-top: 10px;
-            box-shadow: 0 4px 10px rgba(139, 195, 74, 0.3);
-        }
-
-        .food-area {
-            display: inline-block;
-            background: var(--berry);
-            color: white;
-            padding: 8px 20px;
-            border-radius: 30px;
-            font-size: 1rem;
-            font-weight: 600;
-            margin-top: 10px;
-            margin-left: 10px;
-            box-shadow: 0 4px 10px rgba(233, 30, 99, 0.3);
-        }
-
-        .find-nearby-container {
-            margin: 15px 0;
-            display: flex;
-            justify-content: center;
-        }
-
-        .btn-find {
-            background: linear-gradient(to right, var(--berry), var(--eggplant));
-            color: white;
-            padding: 12px 25px;
-            font-size: 1rem;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            box-shadow: 0 4px 15px rgba(103, 58, 183, 0.3);
-        }
-
-        .btn-find:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(103, 58, 183, 0.4);
-        }
-
-        .action-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            justify-content: center;
-            margin: 15px 0;
-        }
-
-        .btn {
-            padding: 16px 35px;
-            font-size: 1.1rem;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn-primary {
-            background: linear-gradient(to right, var(--tomato), var(--carrot));
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(255, 107, 107, 0.4);
-        }
-
-        .btn-secondary {
-            background: linear-gradient(to right, var(--avocado), var(--lettuce));
-            color: white;
-        }
-
-        .btn-secondary:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(139, 195, 74, 0.4);
-        }
-
-        .filters {
-            background: var(--light);
-            border-radius: 15px;
-            padding: 20px;
-            margin: 25px 0;
-            text-align: left;
-        }
-
-        .filters h3 {
-            color: var(--eggplant);
-            margin-bottom: 15px;
-            font-size: 1.4rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .filter-options {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .filter-btn {
-            background-color: white;
-            border: 2px solid var(--mint);
-            color: var(--dark);
-            padding: 10px 20px;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-weight: 500;
-        }
-
-        .filter-btn.active {
-            background-color: var(--mint);
-            color: white;
-        }
-
-        .restaurants-list {
-            margin-top: 30px;
-            text-align: left;
-            display: none;
-            max-height: 400px;
-            overflow-y: auto;
-            padding: 15px;
-            border-radius: 15px;
-            background-color: var(--light);
-            border: 2px dashed var(--lemon);
-        }
-
-        .restaurants-list h3 {
-            color: var(--eggplant);
-            margin-bottom: 15px;
-            border-bottom: 2px solid var(--berry);
-            padding-bottom: 8px;
-            font-size: 1.4rem;
-        }
-
-        .restaurant-item {
-            padding: 15px;
-            background-color: white;
-            margin-bottom: 12px;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
-            border-left: 5px solid var(--avocado);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .restaurant-item:hover {
-            transform: translateX(5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .restaurant-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 10px;
-        }
-
-        .restaurant-rating {
-            background-color: var(--carrot);
-            color: white;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.9rem;
-        }
-
-        .restaurant-info {
-            flex-grow: 1;
-            text-align: left;
-        }
-
-        .restaurant-name {
-            font-weight: 600;
-            margin-bottom: 5px;
-            color: var(--eggplant);
-            font-size: 1.1rem;
-        }
-
-        .restaurant-address {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 5px;
-        }
-
-        .restaurant-distance {
-            color: #888;
-            font-size: 0.9rem;
-        }
-
-        .restaurant-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-
-        .action-btn {
-            padding: 8px 15px;
-            border-radius: 20px;
-            border: none;
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 0.8rem;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .btn-order {
-            background: var(--tomato);
-            color: white;
-        }
-
-        .btn-order:hover {
-            background: #ff5252;
-        }
-
-        .btn-directions {
-            background: var(--mint);
-            color: white;
-        }
-
-        .btn-directions:hover {
-            background: #26a69a;
-        }
-
-        .btn-call {
-            background: var(--berry);
-            color: white;
-        }
-
-        .btn-call:hover {
-            background: #ad1457;
-        }
-
-        .loading {
-            display: none;
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        .spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            border-left-color: var(--tomato);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 15px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .history {
-            margin-top: 30px;
-            text-align: left;
-        }
-
-        .history h3 {
-            color: var(--eggplant);
-            margin-bottom: 15px;
-            border-bottom: 2px solid var(--lemon);
-            padding-bottom: 8px;
-            font-size: 1.4rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .history-list {
-            list-style-type: none;
-            max-height: 150px;
-            overflow-y: auto;
-        }
-
-        .history-item {
-            padding: 12px 15px;
-            background-color: var(--light);
-            margin-bottom: 10px;
-            border-radius: 10px;
-            border-left: 5px solid var(--berry);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            transition: all 0.2s ease;
-        }
-
-        .history-item:hover {
-            transform: translateX(5px);
-            background-color: white;
-        }
-
-        .history-item img {
-            width: 50px;
-            height: 50px;
-            border-radius: 10px;
-            object-fit: cover;
-        }
-
-        .location-status {
-            font-size: 0.9rem;
-            color: var(--berry);
-            margin-top: 10px;
-            font-weight: 500;
-        }
-
-        @media (max-width: 600px) {
-            .container {
-                padding: 20px;
-                border-radius: 20px;
-            }
-            
-            h1 {
-                font-size: 2.2rem;
-            }
-            
-            .food-name {
-                font-size: 1.8rem;
-            }
-            
-            .food-image {
-                width: 220px;
-                height: 220px;
-            }
-            
-            .btn {
-                padding: 14px 25px;
-                font-size: 1rem;
-                width: 100%;
-            }
-            
-            .btn-find {
-                padding: 10px 20px;
-                font-size: 0.9rem;
-                width: auto;
-            }
-            
-            .action-buttons {
-                flex-direction: column;
-            }
-            
-            .filter-options {
-                justify-content: center;
-            }
-
-            .language-selector {
-                position: static;
-                justify-content: center;
-                margin-bottom: 15px;
-            }
-
-            .restaurant-actions {
-                justify-content: center;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <header>
-            <h1><i class="fas fa-utensils"></i> <span data-i18n="title">What To Eat?</span></h1>
-            <p class="subtitle" data-i18n="subtitle">Stop wondering, start eating! 🍕</p>
-            <div class="language-selector">
-                <span data-i18n="language">Language</span>:
-                <select id="languageSelect">
-                    <option value="auto" data-i18n="auto">Auto Detect</option>
-                    <option value="en">English</option>
-                    <option value="ar">العربية</option>
-                </select>
-            </div>
-        </header>
-        
-        <div class="food-display">
-            <img id="foodImage" class="food-image" src="https://source.unsplash.com/300x300/?pizza" alt="Food image">
-            <div class="food-name" id="foodName" data-i18n="clickToDiscover">Click below to find your next meal!</div>
-            <div>
-                <span class="food-category" id="foodCategory" data-i18n="category">Type</span>
-                <span class="food-area" id="foodArea" data-i18n="cuisine">Style</span>
-            </div>
-        </div>
-        
-        <div class="find-nearby-container">
-            <button class="btn-find" id="findNearbyBtn">
-                <i class="fas fa-map-marker-alt"></i> <span data-i18n="findNearby">Find It Nearby 🗺️</span>
-            </button>
-        </div>
-        
-        <div class="action-buttons">
-            <button class="btn btn-primary" id="randomBtn">
-                <i class="fas fa-random"></i> <span data-i18n="whatToEat">Feed Me! 🍽️</span>
-            </button>
-            <button class="btn btn-secondary" id="localBtn">
-                <i class="fas fa-location-arrow"></i> <span data-i18n="locally">Local Vibes 🏠</span>
-            </button>
-        </div>
-        
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <p data-i18n="findingDishes">Finding yummy food...</p>
-        </div>
-        
-        <div class="filters">
-            <h3><i class="fas fa-filter"></i> <span data-i18n="filters">Craving Something?</span></h3>
-            <div class="filter-options" id="categoryFilters">
-                <button class="filter-btn active" data-category="all" data-i18n="allCategories">Anything!</button>
-                <button class="filter-btn" data-category="Fast Food" data-i18n="fastFood">Fast Food 🍔</button>
-                <button class="filter-btn" data-category="Asian" data-i18n="asian">Asian 🍜</button>
-                <button class="filter-btn" data-category="Italian" data-i18n="italian">Italian 🍝</button>
-                <button class="filter-btn" data-category="Mexican" data-i18n="mexican">Mexican 🌮</button>
-                <button class="filter-btn" data-category="Dessert" data-i18n="dessert">Sweet Tooth 🍰</button>
-            </div>
-        </div>
-        
-        <div class="restaurants-list" id="restaurantsList">
-            <h3><i class="fas fa-store"></i> <span data-i18n="bestPlaces">Top Spots Nearby</span></h3>
-            <div id="restaurantsContainer"></div>
-        </div>
-        
-        <div class="history">
-            <h3><i class="fas fa-history"></i> <span data-i18n="recentSuggestions">Your Food Journey</span></h3>
-            <ul class="history-list" id="historyList"></ul>
-        </div>
-        
-        <div class="location-status" id="locationStatus"></div>
-    </div>
-
-    <script>
+<script>
         // Curated database of truly popular dishes (improved)
         const popularDishes = [
             // Global Super Popular (What people actually eat daily)
@@ -603,36 +10,25 @@
             { name: "Tacos", cuisine: "Mexican", category: "Mexican", popularity: 89 },
             { name: "Pasta", cuisine: "Italian", category: "Italian", popularity: 92 },
             { name: "Ramen", cuisine: "Japanese", category: "Asian", popularity: 85 },
-            
-            // Common Asian Dishes
             { name: "Pad Thai", cuisine: "Thai", category: "Asian", popularity: 82 },
             { name: "Curry", cuisine: "Indian", category: "Asian", popularity: 84 },
             { name: "Fried Rice", cuisine: "Chinese", category: "Asian", popularity: 87 },
             { name: "Spring Rolls", cuisine: "Chinese", category: "Asian", popularity: 80 },
-            
-            // Common Italian
             { name: "Spaghetti", cuisine: "Italian", category: "Italian", popularity: 88 },
             { name: "Lasagna", cuisine: "Italian", category: "Italian", popularity: 83 },
-            { name: "Risotto", cuisine: "Italian", category: "Italian", popularity: 78 },
-            
-            // Common Mexican
             { name: "Burritos", cuisine: "Mexican", category: "Mexican", popularity: 86 },
             { name: "Quesadillas", cuisine: "Mexican", category: "Mexican", popularity: 82 },
             { name: "Nachos", cuisine: "Mexican", category: "Mexican", popularity: 84 },
-            
-            // Desserts
             { name: "Ice Cream", cuisine: "International", category: "Dessert", popularity: 94 },
             { name: "Chocolate Cake", cuisine: "International", category: "Dessert", popularity: 87 },
             { name: "Cheesecake", cuisine: "International", category: "Dessert", popularity: 85 },
-            
-            // Add more common dishes...
             { name: "Steak", cuisine: "American", category: "American", popularity: 83 },
             { name: "Salad", cuisine: "International", category: "Healthy", popularity: 75 },
             { name: "Sandwich", cuisine: "American", category: "Fast Food", popularity: 86 },
             { name: "Soup", cuisine: "International", category: "Healthy", popularity: 76 }
         ];
 
-        // Regional cuisine mapping based on location
+        // Regional cuisine mapping
         const regionCuisines = {
             'US': ['Fast Food', 'American', 'Mexican', 'Italian'],
             'GB': ['Fast Food', 'British', 'Indian', 'Italian'],
@@ -748,10 +144,9 @@
         // Auto-detect language on load
         function autoDetectLanguage() {
             const browserLang = navigator.language || navigator.userLanguage;
-            const systemLang = browserLang.split('-')[0];
             
             // Check if Arabic is preferred
-            if (browserLang.includes('ar') || systemLang === 'ar') {
+            if (browserLang.includes('ar')) {
                 return 'ar';
             }
             
@@ -790,7 +185,7 @@
             }
         });
 
-        // Get country from coordinates using free API
+        // Get country from coordinates
         async function getCountryFromCoordinates(lat, lng) {
             try {
                 const response = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`);
@@ -830,26 +225,12 @@
                 if (filteredDishes.length === 0) {
                     displayDish(popularDishes[0]);
                 } else {
-                    // Weighted random selection based on popularity
-                    const randomIndex = getWeightedRandomIndex(filteredDishes);
+                    const randomIndex = Math.floor(Math.random() * filteredDishes.length);
                     displayDish(filteredDishes[randomIndex]);
                 }
                 
                 loadingElement.style.display = 'none';
             }, 500);
-        }
-
-        // Weighted random selection
-        function getWeightedRandomIndex(dishes) {
-            const weights = dishes.map(dish => dish.popularity);
-            const totalWeight = weights.reduce((a, b) => a + b, 0);
-            let random = Math.random() * totalWeight;
-            
-            for (let i = 0; i < weights.length; i++) {
-                random -= weights[i];
-                if (random <= 0) return i;
-            }
-            return dishes.length - 1;
         }
 
         // Get local dish
@@ -882,7 +263,7 @@
                 }
                 
                 if (localDishes.length > 0) {
-                    const randomIndex = getWeightedRandomIndex(localDishes);
+                    const randomIndex = Math.floor(Math.random() * localDishes.length);
                     displayDish(localDishes[randomIndex]);
                 } else {
                     getRandomDish();
@@ -892,7 +273,7 @@
             }, 800);
         }
 
-        // Get user location with better accuracy
+        // Get user location
         function getUserLocation() {
             return new Promise((resolve) => {
                 if (!navigator.geolocation) {
@@ -910,21 +291,13 @@
                             lng: position.coords.longitude
                         };
                         
-                        // Get country from coordinates
                         userCountry = await getCountryFromCoordinates(userLocation.lat, userLocation.lng);
-                        
                         locationStatusElement.textContent = translations[currentLanguage].locationDetected;
                         resolve(userLocation);
                     },
                     (error) => {
-                        let message = translations[currentLanguage].locationDenied;
-                        locationStatusElement.textContent = message;
+                        locationStatusElement.textContent = translations[currentLanguage].locationDenied;
                         resolve(null);
-                    },
-                    {
-                        enableHighAccuracy: true,
-                        timeout: 10000,
-                        maximumAge: 60000
                     }
                 );
             });
@@ -963,26 +336,135 @@
             }, 1500);
         }
 
-        // Generate realistic restaurants with interactive features
+        // Generate realistic restaurants
         function generateRestaurants(dish) {
             const restaurantChains = {
-                'Fast Food': ['McDonald\'s', 'Burger King', 'KFC', 'Subway', 'Pizza Hut', 'Domino\'s'],
-                'Italian': ['Olive Garden', 'Pizza Express', 'Italian Bistro', 'Pasta Palace'],
-                'Asian': ['Panda Express', 'Thai Orchid', 'Sushi House', 'Dragon Palace'],
-                'Mexican': ['Chipotle', 'Taco Bell', 'Mexican Grill', 'Burrito Express'],
-                'Dessert': ['Baskin Robbins', 'Cold Stone', 'Cheesecake Factory', 'Dessert Cafe']
+                'Fast Food': ['McDonald\'s', 'Burger King', 'KFC', 'Subway'],
+                'Italian': ['Pizza Hut', 'Domino\'s', 'Italian Bistro'],
+                'Asian': ['Panda Express', 'Sushi House', 'Dragon Palace'],
+                'Mexican': ['Chipotle', 'Taco Bell', 'Mexican Grill'],
+                'Dessert': ['Baskin Robbins', 'Cold Stone', 'Dessert Cafe']
             };
             
             const category = dish.category;
-            const chains = restaurantChains[category] || ['Local Restaurant', 'Food Place', 'Dining Spot'];
+            const chains = restaurantChains[category] || ['Local Restaurant', 'Food Place'];
             
             const restaurants = [];
-            for (let i = 0; i < 4; i++) {
+            for (let i = 0; i < 3; i++) {
                 const phone = `+1 (555) ${Math.floor(100 + Math.random() * 900)}-${Math.floor(1000 + Math.random() * 9000)}`;
                 restaurants.push({
-                    name: chains[i] || `${category} Restaurant ${i+1}`,
+                    name: chains[i] || `${category} Restaurant`,
                     rating: (4 + Math.random()).toFixed(1),
-                    address: `${Math.floor(100 + Math.random() * 900)} ${['Main St', 'Oak Ave', 'Maple Dr', 'Pine St'][i]}${userCountry === 'US' ? ', New York, NY' : ', Downtown'}`,
+                    address: `${Math.floor(100 + Math.random() * 900)} ${['Main St', 'Oak Ave', 'Maple Dr'][i]}`,
                     distance: `${(Math.random() * 2 + 0.5).toFixed(1)} mi`,
-                    phone: phone,
-                    website: `https://${chains[i
+                    phone: phone
+                });
+            }
+            
+            return restaurants.sort((a, b) => b.rating - a.rating);
+        }
+
+        // Display restaurants with interactive buttons
+        function displayRestaurants(restaurants) {
+            restaurantsContainer.innerHTML = '';
+
+            if (restaurants.length === 0) {
+                restaurantsContainer.innerHTML = `<p>${translations[currentLanguage].noRestaurants}</p>`;
+                return;
+            }
+
+            restaurants.forEach(restaurant => {
+                const restaurantElement = document.createElement('div');
+                restaurantElement.className = 'restaurant-item';
+                restaurantElement.innerHTML = `
+                    <div class="restaurant-header">
+                        <div class="restaurant-rating">${restaurant.rating}</div>
+                        <div class="restaurant-info">
+                            <div class="restaurant-name">${restaurant.name}</div>
+                            <div class="restaurant-address">${restaurant.address}</div>
+                            <div class="restaurant-distance">${restaurant.distance}</div>
+                        </div>
+                    </div>
+                    <div class="restaurant-actions">
+                        <button class="action-btn btn-order" onclick="orderOnline('${restaurant.name}')">
+                            <i class="fas fa-shopping-cart"></i> ${translations[currentLanguage].orderOnline}
+                        </button>
+                        <button class="action-btn btn-directions" onclick="getDirections('${restaurant.address}')">
+                            <i class="fas fa-map-marker-alt"></i> ${translations[currentLanguage].getDirections}
+                        </button>
+                        <button class="action-btn btn-call" onclick="callRestaurant('${restaurant.phone}')">
+                            <i class="fas fa-phone"></i> ${translations[currentLanguage].callNow}
+                        </button>
+                    </div>
+                `;
+                restaurantsContainer.appendChild(restaurantElement);
+            });
+        }
+
+        // Restaurant action functions
+        function orderOnline(restaurantName) {
+            alert(`Redirecting to ${restaurantName} online ordering...`);
+            // In real app, this would open their website
+        }
+
+        function getDirections(address) {
+            const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+            window.open(mapsUrl, '_blank');
+        }
+
+        function callRestaurant(phone) {
+            alert(`Calling ${phone}...`);
+            // In real app: window.location.href = `tel:${phone}`;
+        }
+
+        // Add to history
+        function addToHistory(dish) {
+            suggestionHistory.unshift({
+                name: dish.name,
+                image: `https://source.unsplash.com/100x100/?${encodeURIComponent(dish.name + ' food')}`,
+                category: dish.category,
+                area: dish.cuisine
+            });
+            
+            if (suggestionHistory.length > 5) {
+                suggestionHistory.pop();
+            }
+            
+            updateHistoryDisplay();
+        }
+
+        // Update history display
+        function updateHistoryDisplay() {
+            historyList.innerHTML = '';
+            
+            suggestionHistory.forEach(dish => {
+                const listItem = document.createElement('li');
+                listItem.className = 'history-item';
+                listItem.innerHTML = `
+                    <img src="${dish.image}" alt="${dish.name}">
+                    <div>
+                        <div style="font-weight: 600;">${dish.name}</div>
+                        <div style="font-size: 0.8rem; color: #666;">${dish.area} • ${dish.category}</div>
+                    </div>
+                `;
+                historyList.appendChild(listItem);
+            });
+        }
+
+        // Initialize everything
+        function init() {
+            // Auto-detect and set language
+            const detectedLang = autoDetectLanguage();
+            setLanguage(detectedLang);
+            languageSelect.value = detectedLang;
+            
+            // Get initial dish
+            getRandomDish();
+            
+            // Try to get location
+            getUserLocation();
+        }
+
+        // Start the app
+        init();
+    </script>
