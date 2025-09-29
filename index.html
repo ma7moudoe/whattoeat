@@ -590,484 +590,466 @@
         
         <div class="location-status" id="locationStatus"></div>
     </div>
-
-    <script>
-        // Curated database of truly popular dishes
-        const popularDishes = [
-            { name: "Pizza", cuisine: "Italian", category: "Fast Food", popularity: 99 },
-            { name: "Burger", cuisine: "American", category: "Fast Food", popularity: 98 },
-            { name: "French Fries", cuisine: "American", category: "Fast Food", popularity: 97 },
-            { name: "Fried Chicken", cuisine: "American", category: "Fast Food", popularity: 95 },
-            { name: "Sushi", cuisine: "Japanese", category: "Asian", popularity: 90 },
-            { name: "Tacos", cuisine: "Mexican", category: "Mexican", popularity: 89 },
-            { name: "Pasta", cuisine: "Italian", category: "Italian", popularity: 92 },
-            { name: "Ramen", cuisine: "Japanese", category: "Asian", popularity: 85 },
-            { name: "Pad Thai", cuisine: "Thai", category: "Asian", popularity: 82 },
-            { name: "Curry", cuisine: "Indian", category: "Asian", popularity: 84 },
-            { name: "Fried Rice", cuisine: "Chinese", category: "Asian", popularity: 87 },
-            { name: "Spring Rolls", cuisine: "Chinese", category: "Asian", popularity: 80 },
-            { name: "Spaghetti", cuisine: "Italian", category: "Italian", popularity: 88 },
-            { name: "Lasagna", cuisine: "Italian", category: "Italian", popularity: 83 },
-            { name: "Burritos", cuisine: "Mexican", category: "Mexican", popularity: 86 },
-            { name: "Quesadillas", cuisine: "Mexican", category: "Mexican", popularity: 82 },
-            { name: "Nachos", cuisine: "Mexican", category: "Mexican", popularity: 84 },
-            { name: "Ice Cream", cuisine: "International", category: "Dessert", popularity: 94 },
-            { name: "Chocolate Cake", cuisine: "International", category: "Dessert", popularity: 87 },
-            { name: "Cheesecake", cuisine: "International", category: "Dessert", popularity: 85 }
-        ];
-
-        // Regional cuisine mapping
-        const regionCuisines = {
-            'US': ['Fast Food', 'American', 'Mexican', 'Italian'],
-            'GB': ['Fast Food', 'British', 'Indian', 'Italian'],
-            'CA': ['Fast Food', 'American', 'Chinese', 'Italian'],
-            'AU': ['Fast Food', 'Asian', 'Italian', 'Mediterranean'],
-            'DE': ['German', 'Italian', 'Turkish', 'Fast Food'],
-            'FR': ['French', 'Italian', 'Mediterranean', 'Fast Food'],
-            'IT': ['Italian', 'Mediterranean', 'Fast Food'],
-            'ES': ['Spanish', 'Mediterranean', 'Italian', 'Fast Food'],
-            'JP': ['Japanese', 'Asian', 'Fast Food', 'Italian'],
-            'KR': ['Korean', 'Asian', 'Fast Food', 'Japanese'],
-            'CN': ['Chinese', 'Asian', 'Fast Food'],
-            'IN': ['Indian', 'Asian', 'Fast Food'],
-            'BR': ['Brazilian', 'Fast Food', 'Italian', 'Mexican'],
-            'MX': ['Mexican', 'Fast Food', 'Italian', 'American'],
-            'AE': ['Middle Eastern', 'Fast Food', 'Indian', 'Asian'],
-            'SA': ['Middle Eastern', 'Fast Food', 'Indian', 'Asian'],
-            'EG': ['Middle Eastern', 'Fast Food', 'Mediterranean']
-        };
-
-        // Internationalization data
-        const translations = {
-            en: {
-                title: "What To Eat?",
-                subtitle: "Stop wondering, start eating! 🍕",
-                language: "Language",
-                auto: "Auto Detect",
-                clickToDiscover: "Click below to find your next meal!",
-                category: "Type",
-                cuisine: "Style",
-                findNearby: "Find It Nearby 🗺️",
-                whatToEat: "Feed Me! 🍽️",
-                locally: "Local Vibes 🏠",
-                findingDishes: "Finding yummy food...",
-                filters: "Craving Something?",
-                allCategories: "Anything!",
-                fastFood: "Fast Food 🍔",
-                asian: "Asian 🍜",
-                italian: "Italian 🍝",
-                mexican: "Mexican 🌮",
-                dessert: "Sweet Tooth 🍰",
-                bestPlaces: "Top Spots Nearby",
-                recentSuggestions: "Your Food Journey",
-                noRestaurants: "No spots found for this dish nearby.",
-                locationDetected: "We found you! Showing local favorites 👋",
-                locationDenied: "No location? No problem! Trying global flavors.",
-                locationUnavailable: "Can't find you! Exploring worldwide tastes.",
-                locationTimeout: "Taking too long! Let's try global dishes.",
-                showingCuisine: "Local flavors just for you!",
-                showingGlobal: "Tasting the world! 🌍",
-                orderOnline: "Order Online",
-                getDirections: "Directions",
-                callNow: "Call Now"
-            },
-            ar: {
-                title: "اكل ايه؟",
-                subtitle: "خلص التفكير وبلش الأكل! 🍕",
-                language: "اللغة",
-                auto: "تلقائي",
-                clickToDiscover: "اضغط تحت عشان تعرف تاكل ايه!",
-                category: "النوع",
-                cuisine: "الأسلوب",
-                findNearby: "مطعم قريب 🗺️",
-                whatToEat: "جوعان! 🍽️",
-                locally: "اكل محلي 🏠",
-                findingDishes: "بنلاقي لك أكل لذيذ...",
-                filters: "عايز تاكل ايه؟",
-                allCategories: "اي حاجة!",
-                fastFood: "أكل سريع 🍔",
-                asian: "آسيوي 🍜",
-                italian: "إيطالي 🍝",
-                mexican: "مكسيكي 🌮",
-                dessert: "حلويات 🍰",
-                bestPlaces: "أحسن أماكن قريبة",
-                recentSuggestions: "رحلة الأكل بتاعتك",
-                noRestaurants: "مفيش مطاعم للطبق ده قريبة منك.",
-                locationDetected: "لقيناك! بنعرض الأكل المحلي 👋",
-                locationDenied: "مافيش موقع؟ مش مشكلة! هنجرب أكل عالمي.",
-                locationUnavailable: "مش عارفين نوصلك! هنجرب أكل من بره.",
-                locationTimeout: "بطيء قوي! يلا نجرب أكل عالمي.",
-                showingCuisine: "أكل محلي علشانك!",
-                showingGlobal: "بنأكل من كل العالم! 🌍",
-                orderOnline: "اطلب أونلاين",
-                getDirections: "الاتجاهات",
-                callNow: "اتصل دلوقتي"
-            }
-        };
-
-        // DOM elements
-        const foodNameElement = document.getElementById('foodName');
-        const foodImageElement = document.getElementById('foodImage');
-        const foodCategoryElement = document.getElementById('foodCategory');
-        const foodAreaElement = document.getElementById('foodArea');
-        const randomBtn = document.getElementById('randomBtn');
-        const localBtn = document.getElementById('localBtn');
-        const findNearbyBtn = document.getElementById('findNearbyBtn');
-        const historyList = document.getElementById('historyList');
-        const restaurantsList = document.getElementById('restaurantsList');
-        const restaurantsContainer = document.getElementById('restaurantsContainer');
-        const loadingElement = document.getElementById('loading');
-        const locationStatusElement = document.getElementById('locationStatus');
-        const categoryFilters = document.querySelectorAll('#categoryFilters .filter-btn');
-        const languageSelect = document.getElementById('languageSelect');
-
-        // State variables
-        let selectedCategory = 'all';
-        let suggestionHistory = [];
-        let currentFood = null;
-        let userLocation = null;
-        let userCountry = null;
-        let currentLanguage = 'en';
-
-        // Auto-detect language on load
-        function autoDetectLanguage() {
-            const browserLang = navigator.language || navigator.userLanguage;
-            
-            if (browserLang.includes('ar')) {
-                return 'ar';
-            }
-            
-            return 'en';
-        }
-
-        // Set language
-        function setLanguage(lang) {
-            currentLanguage = lang;
-            document.querySelectorAll('[data-i18n]').forEach(element => {
-                const key = element.getAttribute('data-i18n');
-                if (translations[lang] && translations[lang][key]) {
-                    element.textContent = translations[lang][key];
-                }
-            });
-            
-            if (lang === 'ar') {
-                document.documentElement.dir = 'rtl';
-                document.documentElement.lang = 'ar';
-            } else {
-                document.documentElement.dir = 'ltr';
-                document.documentElement.lang = 'en';
-            }
-        }
-
-        // Language selector event
-        languageSelect.addEventListener('change', (e) => {
-            if (e.target.value === 'auto') {
-                const detectedLang = autoDetectLanguage();
-                setLanguage(detectedLang);
-                languageSelect.value = detectedLang;
-            } else {
-                setLanguage(e.target.value);
-            }
-        });
-
-        // Get country from coordinates
-        async function getCountryFromCoordinates(lat, lng) {
-            try {
-                const response = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`);
-                const data = await response.json();
-                return data.countryCode;
-            } catch (error) {
-                console.log("Error getting country:", error);
-                return null;
-            }
-        }
-
-        // Get local cuisine based on country
-        function getLocalCuisine(countryCode) {
-            return regionCuisines[countryCode] || ['Fast Food', 'Italian', 'Asian', 'Mexican'];
-        }
-
-        // Filter button event listeners
-        categoryFilters.forEach(btn => {
-            btn.addEventListener('click', () => {
-                categoryFilters.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                selectedCategory = btn.getAttribute('data-category');
-            });
-        });
-
-        // Get random popular dish
-        randomBtn.addEventListener('click', getRandomDish);
-
-        function getRandomDish() {
-            loadingElement.style.display = 'block';
-            
-            setTimeout(() => {
-                const filteredDishes = selectedCategory === 'all' 
-                    ? popularDishes 
-                    : popularDishes.filter(dish => dish.category === selectedCategory);
-                
-                if (filteredDishes.length === 0) {
-                    displayDish(popularDishes[0]);
-                } else {
-                    const randomIndex = Math.floor(Math.random() * filteredDishes.length);
-                    displayDish(filteredDishes[randomIndex]);
-                }
-                
-                loadingElement.style.display = 'none';
-            }, 500);
-        }
-
-        // Get local dish
-        localBtn.addEventListener('click', getLocalDish);
-
-        function getLocalDish() {
-            loadingElement.style.display = 'block';
-            
-            if (!userLocation) {
-                getUserLocation().then(() => {
-                    fetchLocalDish();
-                });
-            } else {
-                fetchLocalDish();
-            }
-        }
-
-        function fetchLocalDish() {
-            setTimeout(() => {
-                let localDishes = popularDishes;
-                
-                if (userCountry && regionCuisines[userCountry]) {
-                    const localCuisines = getLocalCuisine(userCountry);
-                    localDishes = popularDishes.filter(dish => 
-                        localCuisines.includes(dish.category)
-                    );
-                    locationStatusElement.textContent = translations[currentLanguage].locationDetected;
-                } else {
-                    locationStatusElement.textContent = translations[currentLanguage].showingGlobal;
-                }
-                
-                if (localDishes.length > 0) {
-                    const randomIndex = Math.floor(Math.random() * localDishes.length);
-                    displayDish(localDishes[randomIndex]);
-                } else {
-                    getRandomDish();
-                }
-                
-                loadingElement.style.display = 'none';
-            }, 800);
-        }
-
-        // Get user location
-        function getUserLocation() {
-            return new Promise((resolve) => {
-                if (!navigator.geolocation) {
-                    locationStatusElement.textContent = translations[currentLanguage].locationUnavailable;
-                    resolve(null);
-                    return;
-                }
-
-                locationStatusElement.textContent = "Detecting your location...";
-                
-                navigator.geolocation.getCurrentPosition(
-                    async (position) => {
-                        userLocation = {
-                            lat: position.coords.latitude,
-                            lng: position.coords.longitude
-                        };
-                        
-                        userCountry = await getCountryFromCoordinates(userLocation.lat, userLocation.lng);
-                        locationStatusElement.textContent = translations[currentLanguage].locationDetected;
-                        resolve(userLocation);
-                    },
-                    (error) => {
-                        locationStatusElement.textContent = translations[currentLanguage].locationDenied;
-                        resolve(null);
-                    }
-                );
-            });
-        }
-
-        // Display dish with better image handling
-function displayDish(dish) {
-    currentFood = dish;
-    
-    foodNameElement.textContent = dish.name;
-    
-    // Use more reliable image URLs
-    const foodKeywords = [
-        dish.name,
-        dish.name + ' food',
-        dish.cuisine + ' food',
-        dish.category + ' food'
+<script>
+    // Curated database of truly popular dishes with direct image URLs
+    const popularDishes = [
+        { name: "Pizza", cuisine: "Italian", category: "Fast Food", popularity: 99, image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=300&h=300&fit=crop" },
+        { name: "Burger", cuisine: "American", category: "Fast Food", popularity: 98, image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=300&h=300&fit=crop" },
+        { name: "French Fries", cuisine: "American", category: "Fast Food", popularity: 97, image: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=300&h=300&fit=crop" },
+        { name: "Fried Chicken", cuisine: "American", category: "Fast Food", popularity: 95, image: "https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=300&h=300&fit=crop" },
+        { name: "Sushi", cuisine: "Japanese", category: "Asian", popularity: 90, image: "https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=300&h=300&fit=crop" },
+        { name: "Tacos", cuisine: "Mexican", category: "Mexican", popularity: 89, image: "https://images.unsplash.com/photo-1565299585323-38174c13fae8?w=300&h=300&fit=crop" },
+        { name: "Pasta", cuisine: "Italian", category: "Italian", popularity: 92, image: "https://images.unsplash.com/photo-1555949258-eb67b1ef0ce2?w=300&h=300&fit=crop" },
+        { name: "Ramen", cuisine: "Japanese", category: "Asian", popularity: 85, image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=300&h=300&fit=crop" },
+        { name: "Pad Thai", cuisine: "Thai", category: "Asian", popularity: 82, image: "https://images.unsplash.com/photo-1559314809-0f155186a844?w=300&h=300&fit=crop" },
+        { name: "Curry", cuisine: "Indian", category: "Asian", popularity: 84, image: "https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=300&h=300&fit=crop" },
+        { name: "Fried Rice", cuisine: "Chinese", category: "Asian", popularity: 87, image: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=300&h=300&fit=crop" },
+        { name: "Spring Rolls", cuisine: "Chinese", category: "Asian", popularity: 80, image: "https://images.unsplash.com/photo-1588347818122-c6f4e0df62b9?w=300&h=300&fit=crop" },
+        { name: "Spaghetti", cuisine: "Italian", category: "Italian", popularity: 88, image: "https://images.unsplash.com/photo-1598866594230-a7c12756260f?w=300&h=300&fit=crop" },
+        { name: "Lasagna", cuisine: "Italian", category: "Italian", popularity: 83, image: "https://images.unsplash.com/photo-1574894709920-11b28e7367e3?w=300&h=300&fit=crop" },
+        { name: "Burritos", cuisine: "Mexican", category: "Mexican", popularity: 86, image: "https://images.unsplash.com/photo-1519183073328-330cc6ead67e?w=300&h=300&fit=crop" },
+        { name: "Quesadillas", cuisine: "Mexican", category: "Mexican", popularity: 82, image: "https://images.unsplash.com/photo-1611859266495-683c49a0b707?w=300&h=300&fit=crop" },
+        { name: "Nachos", cuisine: "Mexican", category: "Mexican", popularity: 84, image: "https://images.unsplash.com/photo-1513456852971-30c0b8199d4d?w=300&h=300&fit=crop" },
+        { name: "Ice Cream", cuisine: "International", category: "Dessert", popularity: 94, image: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=300&h=300&fit=crop" },
+        { name: "Chocolate Cake", cuisine: "International", category: "Dessert", popularity: 87, image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=300&h=300&fit=crop" },
+        { name: "Cheesecake", cuisine: "International", category: "Dessert", popularity: 85, image: "https://images.unsplash.com/photo-1524351199678-941a58a3df50?w=300&h=300&fit=crop" }
     ];
-    
-    // Try the first keyword, if it fails, the browser will show the alt text
-    const imageUrl = `https://source.unsplash.com/featured/300x300/?${encodeURIComponent(foodKeywords[0])}`;
-    foodImageElement.src = imageUrl;
-    foodImageElement.alt = dish.name;
-    
-    // Set a placeholder in case image fails to load
-    foodImageElement.onerror = function() {
-        this.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDMwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjRjBGMEYwIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjOTk5IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiPkZvb2QgSW1hZ2U8L3RleHQ+Cjwvc3ZnPg==';
+
+    // Regional cuisine mapping
+    const regionCuisines = {
+        'US': ['Fast Food', 'American', 'Mexican', 'Italian'],
+        'GB': ['Fast Food', 'British', 'Indian', 'Italian'],
+        'CA': ['Fast Food', 'American', 'Chinese', 'Italian'],
+        'AU': ['Fast Food', 'Asian', 'Italian', 'Mediterranean'],
+        'DE': ['German', 'Italian', 'Turkish', 'Fast Food'],
+        'FR': ['French', 'Italian', 'Mediterranean', 'Fast Food'],
+        'IT': ['Italian', 'Mediterranean', 'Fast Food'],
+        'ES': ['Spanish', 'Mediterranean', 'Italian', 'Fast Food'],
+        'JP': ['Japanese', 'Asian', 'Fast Food', 'Italian'],
+        'KR': ['Korean', 'Asian', 'Fast Food', 'Japanese'],
+        'CN': ['Chinese', 'Asian', 'Fast Food'],
+        'IN': ['Indian', 'Asian', 'Fast Food'],
+        'BR': ['Brazilian', 'Fast Food', 'Italian', 'Mexican'],
+        'MX': ['Mexican', 'Fast Food', 'Italian', 'American'],
+        'AE': ['Middle Eastern', 'Fast Food', 'Indian', 'Asian'],
+        'SA': ['Middle Eastern', 'Fast Food', 'Indian', 'Asian'],
+        'EG': ['Middle Eastern', 'Fast Food', 'Mediterranean']
     };
-    
-    foodCategoryElement.textContent = dish.category;
-    foodAreaElement.textContent = dish.cuisine;
-    
-    restaurantsList.style.display = 'none';
-    addToHistory(dish);
-}
 
-        // Find nearby restaurants
-        findNearbyBtn.addEventListener('click', findNearbyRestaurants);
+    // Internationalization data
+    const translations = {
+        en: {
+            title: "What To Eat?",
+            subtitle: "Stop wondering, start eating! 🍕",
+            language: "Language",
+            auto: "Auto Detect",
+            clickToDiscover: "Click below to find your next meal!",
+            category: "Type",
+            cuisine: "Style",
+            findNearby: "Find It Nearby 🗺️",
+            whatToEat: "Feed Me! 🍽️",
+            locally: "Local Vibes 🏠",
+            findingDishes: "Finding yummy food...",
+            filters: "Craving Something?",
+            allCategories: "Anything!",
+            fastFood: "Fast Food 🍔",
+            asian: "Asian 🍜",
+            italian: "Italian 🍝",
+            mexican: "Mexican 🌮",
+            dessert: "Sweet Tooth 🍰",
+            bestPlaces: "Top Spots Nearby",
+            recentSuggestions: "Your Food Journey",
+            noRestaurants: "No spots found for this dish nearby.",
+            locationDetected: "We found you! Showing local favorites 👋",
+            locationDenied: "No location? No problem! Trying global flavors.",
+            locationUnavailable: "Can't find you! Exploring worldwide tastes.",
+            locationTimeout: "Taking too long! Let's try global dishes.",
+            showingCuisine: "Local flavors just for you!",
+            showingGlobal: "Tasting the world! 🌍",
+            orderOnline: "Order Online",
+            getDirections: "Directions",
+            callNow: "Call Now"
+        },
+        ar: {
+            title: "اكل ايه؟",
+            subtitle: "خلص التفكير وبلش الأكل! 🍕",
+            language: "اللغة",
+            auto: "تلقائي",
+            clickToDiscover: "اضغط تحت عشان تعرف تاكل ايه!",
+            category: "النوع",
+            cuisine: "الأسلوب",
+            findNearby: "مطعم قريب 🗺️",
+            whatToEat: "جوعان! 🍽️",
+            locally: "اكل محلي 🏠",
+            findingDishes: "بنلاقي لك أكل لذيذ...",
+            filters: "عايز تاكل ايه؟",
+            allCategories: "اي حاجة!",
+            fastFood: "أكل سريع 🍔",
+            asian: "آسيوي 🍜",
+            italian: "إيطالي 🍝",
+            mexican: "مكسيكي 🌮",
+            dessert: "حلويات 🍰",
+            bestPlaces: "أحسن أماكن قريبة",
+            recentSuggestions: "رحلة الأكل بتاعتك",
+            noRestaurants: "مفيش مطاعم للطبق ده قريبة منك.",
+            locationDetected: "لقيناك! بنعرض الأكل المحلي 👋",
+            locationDenied: "مافيش موقع؟ مش مشكلة! هنجرب أكل عالمي.",
+            locationUnavailable: "مش عارفين نوصلك! هنجرب أكل من بره.",
+            locationTimeout: "بطيء قوي! يلا نجرب أكل عالمي.",
+            showingCuisine: "أكل محلي علشانك!",
+            showingGlobal: "بنأكل من كل العالم! 🌍",
+            orderOnline: "اطلب أونلاين",
+            getDirections: "الاتجاهات",
+            callNow: "اتصل دلوقتي"
+        }
+    };
 
-        function findNearbyRestaurants() {
-            if (!currentFood) {
-                alert("Please select a dish first!");
-                return;
+    // DOM elements
+    const foodNameElement = document.getElementById('foodName');
+    const foodImageElement = document.getElementById('foodImage');
+    const foodCategoryElement = document.getElementById('foodCategory');
+    const foodAreaElement = document.getElementById('foodArea');
+    const randomBtn = document.getElementById('randomBtn');
+    const localBtn = document.getElementById('localBtn');
+    const findNearbyBtn = document.getElementById('findNearbyBtn');
+    const historyList = document.getElementById('historyList');
+    const restaurantsList = document.getElementById('restaurantsList');
+    const restaurantsContainer = document.getElementById('restaurantsContainer');
+    const loadingElement = document.getElementById('loading');
+    const locationStatusElement = document.getElementById('locationStatus');
+    const categoryFilters = document.querySelectorAll('#categoryFilters .filter-btn');
+    const languageSelect = document.getElementById('languageSelect');
+
+    // State variables
+    let selectedCategory = 'all';
+    let suggestionHistory = [];
+    let currentFood = null;
+    let userLocation = null;
+    let userCountry = null;
+    let currentLanguage = 'en';
+
+    // Auto-detect language on load
+    function autoDetectLanguage() {
+        const browserLang = navigator.language || navigator.userLanguage;
+        
+        if (browserLang.includes('ar')) {
+            return 'ar';
+        }
+        
+        return 'en';
+    }
+
+    // Set language
+    function setLanguage(lang) {
+        currentLanguage = lang;
+        document.querySelectorAll('[data-i18n]').forEach(element => {
+            const key = element.getAttribute('data-i18n');
+            if (translations[lang] && translations[lang][key]) {
+                element.textContent = translations[lang][key];
             }
-
-            loadingElement.style.display = 'block';
-            restaurantsList.style.display = 'none';
-
-            setTimeout(() => {
-                const restaurants = generateRestaurants(currentFood);
-                displayRestaurants(restaurants);
-                loadingElement.style.display = 'none';
-                restaurantsList.style.display = 'block';
-            }, 1500);
+        });
+        
+        if (lang === 'ar') {
+            document.documentElement.dir = 'rtl';
+            document.documentElement.lang = 'ar';
+        } else {
+            document.documentElement.dir = 'ltr';
+            document.documentElement.lang = 'en';
         }
+    }
 
-        // Generate realistic restaurants
-        function generateRestaurants(dish) {
-            const restaurantChains = {
-                'Fast Food': ['McDonald\'s', 'Burger King', 'KFC', 'Subway'],
-                'Italian': ['Pizza Hut', 'Domino\'s', 'Italian Bistro'],
-                'Asian': ['Panda Express', 'Sushi House', 'Dragon Palace'],
-                'Mexican': ['Chipotle', 'Taco Bell', 'Mexican Grill'],
-                'Dessert': ['Baskin Robbins', 'Cold Stone', 'Dessert Cafe']
-            };
-            
-            const category = dish.category;
-            const chains = restaurantChains[category] || ['Local Restaurant', 'Food Place'];
-            
-            const restaurants = [];
-            for (let i = 0; i < 3; i++) {
-                const phone = `+1 (555) ${Math.floor(100 + Math.random() * 900)}-${Math.floor(1000 + Math.random() * 9000)}`;
-                restaurants.push({
-                    name: chains[i] || `${category} Restaurant`,
-                    rating: (4 + Math.random()).toFixed(1),
-                    address: `${Math.floor(100 + Math.random() * 900)} ${['Main St', 'Oak Ave', 'Maple Dr'][i]}`,
-                    distance: `${(Math.random() * 2 + 0.5).toFixed(1)} mi`,
-                    phone: phone
-                });
-            }
-            
-            return restaurants.sort((a, b) => b.rating - a.rating);
-        }
-
-        // Display restaurants with interactive buttons
-        function displayRestaurants(restaurants) {
-            restaurantsContainer.innerHTML = '';
-
-            if (restaurants.length === 0) {
-                restaurantsContainer.innerHTML = `<p>${translations[currentLanguage].noRestaurants}</p>`;
-                return;
-            }
-
-            restaurants.forEach(restaurant => {
-                const restaurantElement = document.createElement('div');
-                restaurantElement.className = 'restaurant-item';
-                restaurantElement.innerHTML = `
-                    <div class="restaurant-header">
-                        <div class="restaurant-rating">${restaurant.rating}</div>
-                        <div class="restaurant-info">
-                            <div class="restaurant-name">${restaurant.name}</div>
-                            <div class="restaurant-address">${restaurant.address}</div>
-                            <div class="restaurant-distance">${restaurant.distance}</div>
-                        </div>
-                    </div>
-                    <div class="restaurant-actions">
-                        <button class="action-btn btn-order" onclick="orderOnline('${restaurant.name}')">
-                            <i class="fas fa-shopping-cart"></i> ${translations[currentLanguage].orderOnline}
-                        </button>
-                        <button class="action-btn btn-directions" onclick="getDirections('${restaurant.address}')">
-                            <i class="fas fa-map-marker-alt"></i> ${translations[currentLanguage].getDirections}
-                        </button>
-                        <button class="action-btn btn-call" onclick="callRestaurant('${restaurant.phone}')">
-                            <i class="fas fa-phone"></i> ${translations[currentLanguage].callNow}
-                        </button>
-                    </div>
-                `;
-                restaurantsContainer.appendChild(restaurantElement);
-            });
-        }
-
-        // Restaurant action functions
-        function orderOnline(restaurantName) {
-            alert(`Redirecting to ${restaurantName} online ordering...`);
-        }
-
-        function getDirections(address) {
-            const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
-            window.open(mapsUrl, '_blank');
-        }
-
-                function callRestaurant(phone) {
-            alert(`Calling ${phone}...`);
-        }
-
-        // Add to history
-        function addToHistory(dish) {
-            suggestionHistory.unshift({
-                name: dish.name,
-                image: `https://source.unsplash.com/100x100/?${encodeURIComponent(dish.name + ' food')}`,
-                category: dish.category,
-                area: dish.cuisine
-            });
-            
-            if (suggestionHistory.length > 5) {
-                suggestionHistory.pop();
-            }
-            
-            updateHistoryDisplay();
-        }
-
-        // Update history display
-        function updateHistoryDisplay() {
-            historyList.innerHTML = '';
-            
-            suggestionHistory.forEach(dish => {
-                const listItem = document.createElement('li');
-                listItem.className = 'history-item';
-                listItem.innerHTML = `
-                    <img src="${dish.image}" alt="${dish.name}">
-                    <div>
-                        <div style="font-weight: 600;">${dish.name}</div>
-                        <div style="font-size: 0.8rem; color: #666;">${dish.area} • ${dish.category}</div>
-                    </div>
-                `;
-                historyList.appendChild(listItem);
-            });
-        }
-
-        // Initialize everything
-        function init() {
-            // Auto-detect and set language
+    // Language selector event
+    languageSelect.addEventListener('change', (e) => {
+        if (e.target.value === 'auto') {
             const detectedLang = autoDetectLanguage();
             setLanguage(detectedLang);
             languageSelect.value = detectedLang;
+        } else {
+            setLanguage(e.target.value);
+        }
+    });
+
+    // Get country from coordinates
+    async function getCountryFromCoordinates(lat, lng) {
+        try {
+            const response = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`);
+            const data = await response.json();
+            return data.countryCode;
+        } catch (error) {
+            console.log("Error getting country:", error);
+            return null;
+        }
+    }
+
+    // Get local cuisine based on country
+    function getLocalCuisine(countryCode) {
+        return regionCuisines[countryCode] || ['Fast Food', 'Italian', 'Asian', 'Mexican'];
+    }
+
+    // Filter button event listeners
+    categoryFilters.forEach(btn => {
+        btn.addEventListener('click', () => {
+            categoryFilters.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectedCategory = btn.getAttribute('data-category');
+        });
+    });
+
+    // Get random popular dish
+    randomBtn.addEventListener('click', getRandomDish);
+
+    function getRandomDish() {
+        loadingElement.style.display = 'block';
+        
+        setTimeout(() => {
+            const filteredDishes = selectedCategory === 'all' 
+                ? popularDishes 
+                : popularDishes.filter(dish => dish.category === selectedCategory);
             
-            // Get initial dish
-            getRandomDish();
+            if (filteredDishes.length === 0) {
+                displayDish(popularDishes[0]);
+            } else {
+                const randomIndex = Math.floor(Math.random() * filteredDishes.length);
+                displayDish(filteredDishes[randomIndex]);
+            }
             
-            // Try to get location
-            getUserLocation();
+            loadingElement.style.display = 'none';
+        }, 500);
+    }
+
+    // Get local dish
+    localBtn.addEventListener('click', getLocalDish);
+
+    function getLocalDish() {
+        loadingElement.style.display = 'block';
+        
+        if (!userLocation) {
+            getUserLocation().then(() => {
+                fetchLocalDish();
+            });
+        } else {
+            fetchLocalDish();
+        }
+    }
+
+    function fetchLocalDish() {
+        setTimeout(() => {
+            let localDishes = popularDishes;
+            
+            if (userCountry && regionCuisines[userCountry]) {
+                const localCuisines = getLocalCuisine(userCountry);
+                localDishes = popularDishes.filter(dish => 
+                    localCuisines.includes(dish.category)
+                );
+                locationStatusElement.textContent = translations[currentLanguage].locationDetected;
+            } else {
+                locationStatusElement.textContent = translations[currentLanguage].showingGlobal;
+            }
+            
+            if (localDishes.length > 0) {
+                const randomIndex = Math.floor(Math.random() * localDishes.length);
+                displayDish(localDishes[randomIndex]);
+            } else {
+                getRandomDish();
+            }
+            
+            loadingElement.style.display = 'none';
+        }, 800);
+    }
+
+    // Get user location
+    function getUserLocation() {
+        return new Promise((resolve) => {
+            if (!navigator.geolocation) {
+                locationStatusElement.textContent = translations[currentLanguage].locationUnavailable;
+                resolve(null);
+                return;
+            }
+
+            locationStatusElement.textContent = "Detecting your location...";
+            
+            navigator.geolocation.getCurrentPosition(
+                async (position) => {
+                    userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    
+                    userCountry = await getCountryFromCoordinates(userLocation.lat, userLocation.lng);
+                    locationStatusElement.textContent = translations[currentLanguage].locationDetected;
+                    resolve(userLocation);
+                },
+                (error) => {
+                    locationStatusElement.textContent = translations[currentLanguage].locationDenied;
+                    resolve(null);
+                }
+            );
+        });
+    }
+
+    // Display dish with direct image URLs
+    function displayDish(dish) {
+        currentFood = dish;
+        
+        foodNameElement.textContent = dish.name;
+        foodImageElement.src = dish.image;
+        foodImageElement.alt = dish.name;
+        foodCategoryElement.textContent = dish.category;
+        foodAreaElement.textContent = dish.cuisine;
+        
+        restaurantsList.style.display = 'none';
+        addToHistory(dish);
+    }
+
+    // Find nearby restaurants
+    findNearbyBtn.addEventListener('click', findNearbyRestaurants);
+
+    function findNearbyRestaurants() {
+        if (!currentFood) {
+            alert("Please select a dish first!");
+            return;
         }
 
-        // Start the app
-        init();
-    </script>
+        loadingElement.style.display = 'block';
+        restaurantsList.style.display = 'none';
+
+        setTimeout(() => {
+            const restaurants = generateRestaurants(currentFood);
+            displayRestaurants(restaurants);
+            loadingElement.style.display = 'none';
+            restaurantsList.style.display = 'block';
+        }, 1500);
+    }
+
+    // Generate realistic restaurants
+    function generateRestaurants(dish) {
+        const restaurantChains = {
+            'Fast Food': ['McDonald\'s', 'Burger King', 'KFC', 'Subway'],
+            'Italian': ['Pizza Hut', 'Domino\'s', 'Italian Bistro'],
+            'Asian': ['Panda Express', 'Sushi House', 'Dragon Palace'],
+            'Mexican': ['Chipotle', 'Taco Bell', 'Mexican Grill'],
+            'Dessert': ['Baskin Robbins', 'Cold Stone', 'Dessert Cafe']
+        };
+        
+        const category = dish.category;
+        const chains = restaurantChains[category] || ['Local Restaurant', 'Food Place'];
+        
+        const restaurants = [];
+        for (let i = 0; i < 3; i++) {
+            const phone = `+1 (555) ${Math.floor(100 + Math.random() * 900)}-${Math.floor(1000 + Math.random() * 9000)}`;
+            restaurants.push({
+                name: chains[i] || `${category} Restaurant`,
+                rating: (4 + Math.random()).toFixed(1),
+                address: `${Math.floor(100 + Math.random() * 900)} ${['Main St', 'Oak Ave', 'Maple Dr'][i]}`,
+                distance: `${(Math.random() * 2 + 0.5).toFixed(1)} mi`,
+                phone: phone
+            });
+        }
+        
+        return restaurants.sort((a, b) => b.rating - a.rating);
+    }
+
+    // Display restaurants with interactive buttons
+    function displayRestaurants(restaurants) {
+        restaurantsContainer.innerHTML = '';
+
+        if (restaurants.length === 0) {
+            restaurantsContainer.innerHTML = `<p>${translations[currentLanguage].noRestaurants}</p>`;
+            return;
+        }
+
+        restaurants.forEach(restaurant => {
+            const restaurantElement = document.createElement('div');
+            restaurantElement.className = 'restaurant-item';
+            restaurantElement.innerHTML = `
+                <div class="restaurant-header">
+                    <div class="restaurant-rating">${restaurant.rating}</div>
+                    <div class="restaurant-info">
+                        <div class="restaurant-name">${restaurant.name}</div>
+                        <div class="restaurant-address">${restaurant.address}</div>
+                        <div class="restaurant-distance">${restaurant.distance}</div>
+                    </div>
+                </div>
+                <div class="restaurant-actions">
+                    <button class="action-btn btn-order" onclick="orderOnline('${restaurant.name}')">
+                        <i class="fas fa-shopping-cart"></i> ${translations[currentLanguage].orderOnline}
+                    </button>
+                    <button class="action-btn btn-directions" onclick="getDirections('${restaurant.address}')">
+                        <i class="fas fa-map-marker-alt"></i> ${translations[currentLanguage].getDirections}
+                    </button>
+                    <button class="action-btn btn-call" onclick="callRestaurant('${restaurant.phone}')">
+                        <i class="fas fa-phone"></i> ${translations[currentLanguage].callNow}
+                    </button>
+                </div>
+            `;
+            restaurantsContainer.appendChild(restaurantElement);
+        });
+    }
+
+    // Restaurant action functions
+    function orderOnline(restaurantName) {
+        alert(`Redirecting to ${restaurantName} online ordering...`);
+    }
+
+    function getDirections(address) {
+        const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+        window.open(mapsUrl, '_blank');
+    }
+
+    function callRestaurant(phone) {
+        alert(`Calling ${phone}...`);
+    }
+
+    // Add to history
+    function addToHistory(dish) {
+        suggestionHistory.unshift({
+            name: dish.name,
+            image: dish.image,
+            category: dish.category,
+            area: dish.cuisine
+        });
+        
+        if (suggestionHistory.length > 5) {
+            suggestionHistory.pop();
+        }
+        
+        updateHistoryDisplay();
+    }
+
+    // Update history display
+    function updateHistoryDisplay() {
+        historyList.innerHTML = '';
+        
+        suggestionHistory.forEach(dish => {
+            const listItem = document.createElement('li');
+            listItem.className = 'history-item';
+            listItem.innerHTML = `
+                <img src="${dish.image}" alt="${dish.name}">
+                <div>
+                    <div style="font-weight: 600;">${dish.name}</div>
+                    <div style="font-size: 0.8rem; color: #666;">${dish.area} • ${dish.category}</div>
+                </div>
+            `;
+            historyList.appendChild(listItem);
+        });
+    }
+
+    // Initialize everything
+    function init() {
+        // Auto-detect and set language
+        const detectedLang = autoDetectLanguage();
+        setLanguage(detectedLang);
+        languageSelect.value = detectedLang;
+        
+        // Get initial dish
+        getRandomDish();
+        
+        // Try to get location
+        getUserLocation();
+    }
+
+    // Start the app
+    init();
+</script>
 </body>
 </html>
